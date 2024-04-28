@@ -1,6 +1,6 @@
 # DDG Predictor
 
-![overview](https://github.com/ShiweiWu-545/TGTPO/blob/main/data/overview.png)
+![image](https://github.com/ShiweiWu-545/TGTPO/blob/main/data/overview.png)
 
 This repository contains the deep learning model introduced in the paper "Learning protein affinity codes with dynamic residues selection and multidimensional feature interactions using graph transformer". It predicts changes in binding energy upon mutation (ddG) for protein-protein complexes.
 
