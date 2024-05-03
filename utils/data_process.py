@@ -6,6 +6,8 @@ from data.my_config import config
 from scripts.datasets import *
 import pandas as pd
 import copy
+from pathlib import Path
+import shutil
 
 
 class PaddingCollate(object):
@@ -332,3 +334,36 @@ def Optimised_compilation(model):
     except RuntimeError:
         print('Windows not yet supported for Optimised compilation')
     return model
+
+
+def make_input(path_pdb, path_mutation, output_dir, path_bin_evoef2='EvoEF2', return_json=False):
+    '''
+    path_pdb: PDB 文件的路径。
+    path_mutation: 突变信息的路径。
+    output_dir: 输出目录的路径。
+    path_bin_evoef2: EvoEF2 可执行文件的路径，默认为 'EvoEF2'。
+    return_json: 一个布尔值，如果为 True，则返回记录的 JSON 格式；如果为 False，则返回 None。
+    '''
+    from utils.tools import ProteinTools
+    tools = ProteinTools()
+
+    output_dir = Path(output_dir)
+    output_dir.mkdir(parents=True, exist_ok=True)
+    path_wt = output_dir / 'wt.pdb'
+    path_mut = output_dir / 'mut.pdb'
+    path_mut_list = output_dir / 'mutation.txt'
+
+    shutil.copy(path_pdb, path_wt)
+    shutil.copy(path_mutation, path_mut_list)
+    tools.evoef2(path_wt, path_mut_list, path_mut, path_bin=path_bin_evoef2)
+
+    record = {
+        'path_wt': str(path_wt.name),
+        'path_mut': str(path_mut.name),
+        'mutation': path_mut_list.read_text().strip(';'),
+        'dataset': 'test',
+    }
+    if return_json:
+        return record
+    else:
+        return None

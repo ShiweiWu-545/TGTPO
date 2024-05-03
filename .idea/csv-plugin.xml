@@ -10,13 +10,6 @@
             </Attribute>
           </value>
         </entry>
-        <entry key="\datasets\skempi_v2_del_M1707.csv">
-          <value>
-            <Attribute>
-              <option name="separator" value="," />
-            </Attribute>
-          </value>
-        </entry>
       </map>
     </option>
   </component>
