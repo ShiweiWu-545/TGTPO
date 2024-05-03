@@ -8,6 +8,8 @@ import pandas as pd
 import copy
 from pathlib import Path
 import shutil
+from utils.cal_rasa import get_region_ske
+import os
 
 
 class PaddingCollate(object):
@@ -210,7 +212,11 @@ def choice_residue(data_wt, data_mut, pdb_name):
     return batch
 
 
-def load_wt_mut_pdb_pair(wt_path, mut_path, pdb_name):
+def load_wt_mut_pdb_pair(wt_path, mut_path, proteinA, proteinB):
+    tem_name = os.path.splitext(os.path.basename(wt_path))[0]
+    pdb_name = '_'.join(tem_name.split('_')[1:3])
+
+    get_region_ske(tem_name, proteinA, proteinB)
 
     try:
         data_wt = parse_pdb(wt_path)
@@ -336,14 +342,9 @@ def Optimised_compilation(model):
     return model
 
 
-def make_input(path_pdb, path_mutation, output_dir, path_bin_evoef2='EvoEF2', return_json=False):
-    '''
-    path_pdb: PDB 文件的路径。
-    path_mutation: 突变信息的路径。
-    output_dir: 输出目录的路径。
-    path_bin_evoef2: EvoEF2 可执行文件的路径，默认为 'EvoEF2'。
-    return_json: 一个布尔值，如果为 True，则返回记录的 JSON 格式；如果为 False，则返回 None。
-    '''
+def make_input(path_pdb, path_mutation, output_dir, return_json=False):
+    path_bin_evoef2 = os.path.join(os.path.dirname(os.getcwd()), 'EvoEF2/EvoEF2')
+
     from utils.tools import ProteinTools
     tools = ProteinTools()
 

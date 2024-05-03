@@ -9,14 +9,16 @@ from utils.cal_rasa import get_region_ske
 
 
 if __name__ == '__main__':
+    wt_path = '../data/WT_1PPF_EI_EI19H.pdb'
+    mut_path = '../data/MUT_1PPF_EI_EI19H.pdb'
+    proteinA = 'E'
+    proteinB = 'I'
 
     # Fixed random number seed
     set_seed(config.train.seed)
 
-    get_region_ske('WT_1PPF_EI_EI19H.pdb', 'E', 'I', r'D:\Desktop\GToPO\上传\TGTPO\data')
-
     # data
-    batch = load_wt_mut_pdb_pair('../data/WT_1PPF_EI_EI19H.pdb', '../data/MUT_1PPF_EI_EI19H.pdb', '1PPF_EI')
+    batch = load_wt_mut_pdb_pair(wt_path, mut_path, proteinA, proteinB)
     batch = batch_generator(batch)
 
     # load model

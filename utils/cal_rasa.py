@@ -17,11 +17,7 @@ max_asa = {'ALA':  113.0,'ARG':  241.0,'ASN':  158.0,'ASP':  151.0,'CYS':  140.0
 
 
 def get_protein_divide(pdb_name):
-    """
-    pdb_name:XXXX_XX_XXXX，不包含reverse
-    """
-    # 确定复合物中两个蛋白质的划分
-    chains = []  # 这里得到的复合物的蛋白质划分一定是准确的
+    chains = []
     tem_data = open('/home/xin/UniBind/input/skempi_v2.csv').readlines()
     for line in tem_data:
         if line[0] == '#': continue
@@ -32,14 +28,10 @@ def get_protein_divide(pdb_name):
 
 
 def pdb_neme_toAB(i):
-    """
-        例如：将1KBH_A_B转化为1KBH_AB
-        如果送入的为列表，则将['1CSE_E_I', 'LI45G', 'LI38G']转化为 1CSE_EI_LI38G索引1对应清理前突变，索引2对应清理后突变
-    """
     mut = None
     if isinstance(i, list):
-        mut = i[2]  # 清理后的突变
-        i = i[0]  # pdb名称例如1KBH_A_B
+        mut = i[2]
+        i = i[0]
     tem = i.split('_', 1)
     tem[1] = tem[1].replace('_', '')
     tem = tem[0] + '_' + tem[1]
@@ -57,36 +49,24 @@ def cal_asa_bio(file, out_dir):
 
     outf =out_dir / (pdb_name[:-4] + "_asa.pdb")
     p = PDBParser(QUIET=1)
-    # This assumes you have a local copy of 1LCD.pdb in a directory called "PDB"
     struct = p.get_structure(None, file)
     sr = ShrakeRupley()
     sr.compute(struct, level="R")
 
-    # 遍历结构中的每个模型、链、残基
     for model in struct:
         for chain in model:
             for residue in chain:
-                # 获取残基的id
-                # residue_id = residue.get_id()
-                # 获取这个残基对应的B因子值
+
                 new_b_factor = round(residue.sasa, 2)
-                # 遍历残基中的每个原子，并设置B因子
                 for atom in residue:
                     atom.set_bfactor(new_b_factor)
-    # 创建 PDBIO 对象
 
     io = PDBIO()
-    # 设置要输出的结构
+
     io.set_structure(struct)
 
-    # 将结构保存到新的文件
     io.save(str(outf))
     return outf
-
-# cmd = "/home/xin/anaconda3/bin/pdb_selchain -B ./1A4Y_AB_HB84A/WT_1A4Y_AB_HB84A.pdb > ./1A4Y_AB_HB84A/1A4Y_B.pdb"
-# os.system(cmd)
-
-# calc_asa_areaimol('1A4Y/1A4Y_AB_HB84A/WT_1A4Y_AB_HB84A.pdb')
 
 def determine_region_group(row):
     if row['d_rasa'] == 0:
@@ -116,9 +96,7 @@ def analyse_asa(asa_c,asa_0 = None,asa_1=None):
     df_m = df_m.reset_index(drop=True)
     df_c.sort_values(by='pos', inplace=True)
     df_c = df_c.reset_index(drop=True)
-    # a = (df_c['res'] == df_m['res'])
     assert len(df_c) == len(df_m)
-    # a = df_c['res'] == df_m['res']
     assert (df_c['res'] == df_m['res']).all()
     df_c['asa_m'] = df_m['asa']
     df_c['protein'] = df_m['protein']
@@ -129,7 +107,12 @@ def analyse_asa(asa_c,asa_0 = None,asa_1=None):
     df_c['region'] = df_c.apply(determine_region_group,axis=1)
     new_order = ['pos', 'res', 'chain','region','protein','rasa_c','rasa_m','d_rasa','max_asa','asa','asa_m']
     df_c = df_c[new_order]
-    out_file = str(asa_c)[:-8]+'.region'
+
+    tem_parent = os.path.dirname(str(asa_c))
+    tem_file = os.path.splitext(os.path.basename(str(asa_c)))[0]
+    tem_file = '_'.join(tem_file.split('_')[1:3])
+    out_file = os.path.join(tem_parent, tem_file) + '.region'
+
     df_c.to_csv(out_file,index =False)
 
 
@@ -160,10 +143,7 @@ def analyse_pdb(asa_pdb):
     return df
 
 
-
-
 def get_region_2(name,proteinA,proteinB,out_dir):
-    # parent_path = pdbfile.parent
     pdb_dir_name = name+'_'+(proteinA+proteinB)
 
     out_dir = out_dir / pdb_dir_name
@@ -174,31 +154,31 @@ def get_region_2(name,proteinA,proteinB,out_dir):
     cmd_extract_chains_1 = "/home/xin/anaconda3/bin/pdb_selchain -" + ','.join(proteinB) + ' ' + str(pdb) + ' > ' + str(pdb_1)
     os.system(cmd_extract_chains_0)
     os.system(cmd_extract_chains_1)
-    # asa_0 = calc_asa_areaimol(pdb_0,out_dir)
-    # asa_1 = calc_asa_areaimol(pdb_1,out_dir)
-    # asa_c = calc_asa_areaimol(pdb,out_dir)
     asa_0 = cal_asa_bio(pdb_0,out_dir)
     asa_1 = cal_asa_bio(pdb_1,out_dir)
     asa_c = cal_asa_bio(pdb,out_dir)
     analyse_asa(asa_c,asa_0,asa_1)
 
-def get_region_ske(name,proteinA,proteinB,out_dir):
+def get_region_ske(name,proteinA,proteinB):
+    name = name + '.pdb'
+    out_dir = os.path.dirname(os.getcwd()) + '/data'
+
     pdb_name = name.split('_')[1]
-    # parent_path = pdbfile.parent
-    # pdb_dir_name = name+'_'+(proteinA+proteinB)
     out_dir = Path(out_dir)
-    # out_dir = out_dir / pdb_name
     pdb = out_dir / name
     pdb_0 = out_dir / (pdb_name+'_'+proteinA+'.pdb')
     pdb_1 = out_dir / (pdb_name+'_'+proteinB+'.pdb')
-    cmd_extract_chains_0 = "pdb_selchain.exe -" + ','.join(proteinA) + ' ' + str(pdb) + ' > ' + str(pdb_0)
-    cmd_extract_chains_1 = "pdb_selchain.exe -" + ','.join(proteinB) + ' ' + str(pdb) + ' > ' + str(pdb_1)
+    cmd_extract_chains_0 = "pdb_selchain -" + ','.join(proteinA) + ' ' + str(pdb) + ' > ' + str(pdb_0)
+    cmd_extract_chains_1 = "pdb_selchain -" + ','.join(proteinB) + ' ' + str(pdb) + ' > ' + str(pdb_1)
     os.system(cmd_extract_chains_0)
     os.system(cmd_extract_chains_1)
-    # asa_0 = calc_asa_areaimol(pdb_0,out_dir)
-    # asa_1 = calc_asa_areaimol(pdb_1,out_dir)
-    # asa_c = calc_asa_areaimol(pdb,out_dir)
     asa_0 = cal_asa_bio(pdb_0,out_dir)
     asa_1 = cal_asa_bio(pdb_1,out_dir)
     asa_c = cal_asa_bio(pdb,out_dir)
     analyse_asa(asa_c,asa_0,asa_1)
+
+    os.remove(pdb_0)
+    os.remove(pdb_1)
+    os.remove(asa_0)
+    os.remove(asa_1)
+    os.remove(asa_c)
