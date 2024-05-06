@@ -2,7 +2,7 @@
 
 ![image](https://github.com/ShiweiWu-545/TGTPO/blob/main/data/overview.jpg)
 
-This repository contains the deep learning model introduced in the paper "Learning protein affinity codes with dynamic residues selection and multidimensional feature interactions using graph transformer". It predicts changes in binding energy upon mutation (DDG) for protein-protein complexes.
+TGTPO a deep-learning framework designed to uncover the functional impacts of mutations on the affinities of PPIs. This framework differs from other transformer-based models typically applied to tasks such as image recognition and protein structure prediction29-34. Our framework consists of two main components: a dynamic residue selection strategy that captures information on complete affinity changes as input; and a three-pass neural network module called MIDFORMER, which serves as the backbone of TGTPO and is used to model the dependencies and information interactions between multi-scale and multi-level features.
 
 ## Installation
 
