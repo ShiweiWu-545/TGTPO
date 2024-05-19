@@ -6,9 +6,13 @@ from models.predictor import DDGPredictor
 from models.train import *
 from data.my_config import config
 from utils.cal_rasa import get_region_ske
+import time
 
 
 if __name__ == '__main__':
+    start_time = time.time()
+
+
     wt_path = '../data/WT_1PPF_EI_EI19H.pdb'
     mut_path = '../data/MUT_1PPF_EI_EI19H.pdb'
     proteinA = 'E'
@@ -30,5 +34,9 @@ if __name__ == '__main__':
     # run
     run = run_model()
     yhat = run.make_validation_step(model, batch)
+    end_time = time.time()
+    execution_time = end_time - start_time
+
     print('DDG:', yhat)
     print('Positive values indicate a decrease in affinity and negative values indicate an increase in affinity.')
+    print(f"Execution time: {execution_time} seconds")

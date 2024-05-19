@@ -36,8 +36,9 @@ cd TGTPO
 
 conda create --name TGTPO python=3.8
 conda activate TGTPO
-pip install -r requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple
+pip install -r requirements.txt
 ```
+The TGTPO dependency configuration process takes about 2 hours on a standard computer.
 
 # Usage
 
@@ -46,6 +47,13 @@ The model requires two input PDB files: (1) a wild-type complex structure, and (
 ```
 python ./run/run_model.py
 ```
+Outputs
+```
+DDG: tensor([0.0399], device='cuda:0', grad_fn=<SumBackward1>)
+Positive values indicate a decrease in affinity and negative values indicate an increase in affinity.
+Execution time: 3.13285756111145 seconds
+```
+
 
 # Contact
 
