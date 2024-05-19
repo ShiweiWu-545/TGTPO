@@ -5,8 +5,8 @@
 ## Contents
 
 - [Overview](#overview)
-- [System Requirements](#System Requirements)
-- [Installation Guide](#Installation Guide)
+- [Requirements](#Requirements)
+- [Installation](#Installation)
 - [Usage](#Usage)
 - [Contact](#Contact)
 
@@ -15,7 +15,7 @@
 
 **TGTPO** a deep-learning framework designed to uncover the functional impacts of mutations on the affinities of PPIs. This framework differs from other transformer-based models typically applied to tasks such as image recognition and protein structure prediction. Our framework consists of two main components: a dynamic residue selection strategy that captures information on complete affinity changes as input; and a three-pass neural network module called MIDFORMER, which serves as the backbone of TGTPO and is used to model the dependencies and information interactions between multi-scale and multi-level features.
 
-# System Requirements
+# Requirements
 
 ## Hardware Requirements
 
@@ -26,7 +26,7 @@ TGTPO has been tested on a standard computer equipped with an Intel Core i9 proc
 
 TGTPO supports Linux. It has been tested on Ubuntu 22.04.
 
-# Installation Guide
+# Installation
 
 The model was tested on Linux using  `Python 3.8`, `PyTorch 2.1.2` ,`easydict 1.13` ,`numpy 1.26.4` ,`pandas 2.2.2`, and `Biopython 1.7.0`. The dependencies can be set up using the following commands:
 
