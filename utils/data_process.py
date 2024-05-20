@@ -167,7 +167,7 @@ class KnnResidue(object):
 
             while (len(set(core_index) - (set(index_list))) / len(set(core_index))) > (1 - self.core_ratio):
                 debug = (len(set(core_index) - (set(index_list))) / len(set(core_index)))
-                print('不在所选残基中的core占总core的比例：', debug)
+                print('Proportion of CORE not in the selected residues to total CORE:', debug)
                 pos_CA_mut = self.translate_point(pos_CA_mut, core_pos_CA_center, self.mut_lr)
                 index_list = self.get_mut_around_res(pos_CA, pos_CA_mut)[:self.num_neighbors]
                 rnum += 1

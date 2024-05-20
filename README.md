@@ -54,7 +54,6 @@ Positive values indicate a decrease in affinity and negative values indicate an 
 Execution time: 3.13285756111145 seconds
 ```
 
-
 # Contact
 
 Please contact wushiwei@hrbeu.edu.cn for any questions related to the source code.
