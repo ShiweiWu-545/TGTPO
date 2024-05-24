@@ -155,7 +155,7 @@ class GeometricAttention(nn.Module):
         logits_node = self._node_logits(x)
         logits_pair_sequence = self._pair_logits(z)
         logits_pair_distance = self._distance_logits(d)
-        # weight系数计算
+        # weight
         a, b, c = self.weight_Attention(logits_node, logits_pair_sequence, logits_pair_distance)
 
         logits_sum = np.sqrt(1 / 3) * (a * logits_node + b * logits_pair_sequence + c * logits_pair_distance)
