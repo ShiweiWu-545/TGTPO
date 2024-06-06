@@ -56,9 +56,9 @@ Execution time: 3.13285756111145 seconds
 
 # Pseudocode
 We provide complete, detailed pseudocode presentations for the main algorithmic functions.
-“`html
+“
 [Click to view download pseudocode](https://github.com/ShiweiWu-545/TGTPO/blob/main/Pseudocode/Pseudocode.pdf)
-"`
+"
 
 # Contact
 
