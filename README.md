@@ -54,6 +54,12 @@ Positive values indicate a decrease in affinity and negative values indicate an 
 Execution time: 3.13285756111145 seconds
 ```
 
+# Pseudocode
+We provide complete, detailed pseudocode presentations for the main algorithmic functions.
+“'html
+[pseudocode](https://github.com/ShiweiWu-545/TGTPO/blob/main/Pseudocode/Pseudocode.pdf)
+“'
+
 # Contact
 
 Please contact wushiwei@hrbeu.edu.cn for any questions related to the source code.
